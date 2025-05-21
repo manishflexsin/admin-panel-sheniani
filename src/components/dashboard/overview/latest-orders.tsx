@@ -50,36 +50,37 @@ export interface Order {
 export interface LatestOrdersProps {
   orders?: Order[];
   sx?: SxProps;
-onVendorUpdated?: () => void; // Add this line
-customUserlist: Order[];
-page: number;
+  onVendorUpdated?: () => void; // Add this line
+  customUserlist: Order[];
+  page: number;
 
 }
 
-export function LatestOrders({ orders = [], sx, onVendorUpdated, customUserlist, page}: LatestOrdersProps): React.JSX.Element {
+export function LatestOrders({ orders = [], sx, onVendorUpdated, customUserlist, page }: LatestOrdersProps): React.JSX.Element {
   const [open, setOpen] = React.useState(false);
   const [selectedOrder, setSelectedOrder] = React.useState<Order | null>(null);
-  const [orders1, setOrders] = React.useState<Order[]|undefined>([]);
+  const [orders1, setOrders] = React.useState<Order[] | undefined>([]);
   const [loading, setLoading] = React.useState<boolean>(false); // State to manage loading status
   const [selectedStatus, setSelectedStatus] = React.useState<'pending' | 'approved' | 'cancelled'>('pending');
- 
+
   // authtoken
   const authToken = localStorage.getItem('auth-token');
 
   // fetching the data from the API
 
- useEffect(() => {
+  useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get(`https://api.w7.flexsin.org/v1/admin/user/getAll?limit=10&page=${page}`,{
+        const response = await axios.get(`http://localhost:4000/api/v1/user/getAllUsers`, {
           headers: {
             'Authorization': `Bearer ${authToken}`,
           },
         }
-)
-         setOrders(Array.isArray(response.data.data.results) ? response.data.data.results : []);
-         console.log( 'response.data',response.data.data.results);
-          // console.log( 'response.data',response.data);
+        )
+        console.log("response is", response);
+        setOrders(Array.isArray(response.data.data.users) ? response.data.data.users : []);
+        console.log('response.data', response.data.data.results);
+        // console.log( 'response.data',response.data);
       } catch (error) {
         console.error('Error fetching orders:', error);
         toast.error('Failed to fetch user data.');
@@ -95,7 +96,7 @@ export function LatestOrders({ orders = [], sx, onVendorUpdated, customUserlist,
   }, [customUserlist]);
 
 
-  console.log("the orders are in the orders",orders1)
+  console.log("the orders are in the orders", orders1)
 
   const handleEditClick = (order: Order) => {
     setSelectedOrder(order);
@@ -112,7 +113,7 @@ export function LatestOrders({ orders = [], sx, onVendorUpdated, customUserlist,
     setSelectedStatus(event.target.value as 'pending' | 'approved' | 'cancelled');
   };
 
-  const handleDone = async() => {
+  const handleDone = async () => {
     // Handle the status update logic here
     console.log('Updated Status:', selectedStatus);
     if (!selectedStatus.trim()) {
@@ -123,7 +124,7 @@ export function LatestOrders({ orders = [], sx, onVendorUpdated, customUserlist,
 
     try {
       // Retrieve the auth token from localStorage
-     
+
       if (!authToken) {
         throw new Error('No authentication token found. Please log in.');
       }
@@ -132,19 +133,19 @@ export function LatestOrders({ orders = [], sx, onVendorUpdated, customUserlist,
           'Authorization': `Bearer ${authToken}`,
         },
       });
-      if(response.status != 200){
+      if (response.status != 200) {
         alert(response.data.message)
-      }else{
+      } else {
         if (onVendorUpdated) {
           onVendorUpdated(); // Call the callback to refresh the list
         }
         handleClose();
       }
-      console.log({ orders , sx, onVendorUpdated }, "onVendorUpdated")
+      console.log({ orders, sx, onVendorUpdated }, "onVendorUpdated")
       const data = await response.data;
       handleClose()
       console.log(response, 'response');
-      
+
       const notify = () => toast(response.data.message);
       notify();
     } catch (error) {
@@ -153,10 +154,10 @@ export function LatestOrders({ orders = [], sx, onVendorUpdated, customUserlist,
       setLoading(false); // Stop loading
     }
   };
-  
-  function capitalizeFirstLetter(str:string):string {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
+
+  function capitalizeFirstLetter(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
   return (
     <Card sx={sx}>
@@ -180,11 +181,11 @@ export function LatestOrders({ orders = [], sx, onVendorUpdated, customUserlist,
 
               return (
                 <TableRow hover key={order.id}>
-                  <TableCell>{order.id.slice(-8)}</TableCell>
-                  <TableCell>{order.firstName?order.firstName:'' +" "+order.lastName?order.lastName:''}</TableCell>
+                  <TableCell>{ }</TableCell>
+                  <TableCell>{order.firstName ? order.firstName : '' + " " + order.lastName ? order.lastName : ''}</TableCell>
                   <TableCell>{dayjs(order.createdAt).format('MMM D, YYYY')}</TableCell>
                   <TableCell>{capitalizeFirstLetter(order.payment_Status)}</TableCell>
-                  
+
                   <TableCell>
                     <IconButton color="primary" aria-label="view" >
                       <VisibilityIcon />
@@ -228,7 +229,7 @@ export function LatestOrders({ orders = [], sx, onVendorUpdated, customUserlist,
           </Box>
         </Box>
       </Modal>
-      <ToastContainer/>
+      <ToastContainer />
     </Card>
   );
 }

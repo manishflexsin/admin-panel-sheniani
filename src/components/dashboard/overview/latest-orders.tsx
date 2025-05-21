@@ -37,6 +37,7 @@ const statusMap = {
 } as const;
 
 export interface Order {
+  role: string;
   id: string;
   customer: { name: string };
   status: 'pending' | 'approved' | 'cancelled';
@@ -182,8 +183,8 @@ export function LatestOrders({ orders = [], sx, onVendorUpdated, customUserlist,
 
               return (
                 <TableRow hover key={idx}>
-                  <TableCell>{ }</TableCell>
-                  <TableCell>{order.firstName ? order.firstName : '' + " " + order.lastName ? order.lastName : ''}</TableCell>
+                  <TableCell>{(order.firstName ? order.firstName : '') + " " + (order.lastName ? order.lastName : '')}</TableCell>
+                  <TableCell>{order.role}</TableCell>
                   <TableCell>{dayjs(order.createdAt).format('MMM D, YYYY')}</TableCell>
                   <TableCell>{}</TableCell>
 

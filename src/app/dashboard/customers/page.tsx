@@ -1,128 +1,456 @@
 "use client"
 /* eslint-disable -- Allowing console logs for debugging purposes*/
 // import * as React from 'react';
-import type { Metadata } from 'next';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import { Download as DownloadIcon } from '@phosphor-icons/react/dist/ssr/Download';
-import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
-import { Upload as UploadIcon } from '@phosphor-icons/react/dist/ssr/Upload';
-import dayjs from 'dayjs';
+// import type { Metadata } from 'next';
+// import Button from '@mui/material/Button';
+// import Stack from '@mui/material/Stack';
+// import Typography from '@mui/material/Typography';
+// import { Download as DownloadIcon } from '@phosphor-icons/react/dist/ssr/Download';
+// import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
+// import { Upload as UploadIcon } from '@phosphor-icons/react/dist/ssr/Upload';
+// import dayjs from 'dayjs';
 
-import { config } from '@/config';
-import { CustomersFilters } from '@/components/dashboard/customer/customers-filters';
-import { CustomersTable } from '@/components/dashboard/customer/customers-table';
-import type { Customer } from '@/components/dashboard/customer/customers-table';
-import { LatestOrders } from '@/components/dashboard/overview/latest-orders';
+// import { config } from '@/config';
+// import { CustomersFilters } from '@/components/dashboard/customer/customers-filters';
+// import { CustomersTable } from '@/components/dashboard/customer/customers-table';
+// import type { Customer } from '@/components/dashboard/customer/customers-table';
+// import { LatestOrders } from '@/components/dashboard/overview/latest-orders';
 
-import Pagination from '@mui/material/Pagination';
-import { useState } from 'react';
-import axios from 'axios';
-import { GET_VENDOR } from '@/constants';
-// export const metadata = { title: `Vendors | Dashboard | ${config.site.name}` } satisfies Metadata;
+// import Pagination from '@mui/material/Pagination';
+// import { useState } from 'react';
+// import axios from 'axios';
+// import { GET_VENDOR } from '@/constants';
+// // export const metadata = { title: `Vendors | Dashboard | ${config.site.name}` } satisfies Metadata;
+// import { useEffect } from 'react';
+// const customers = [] satisfies Customer[];
+
+// export default function Page(): React.JSX.Element {
+//   const [customers, setCustomers] = useState<Customer[]>([])
+//   const [userList, setUserList] = useState<any[]>([]); // State to manage user list
+
+//   const [page, setPage] = useState(1); // Current page state
+//   const rowsPerPage = 5; // Rows per page
+
+//   const fetchCustomers = async () => {
+//     try {
+//       // Retrieve the authentication token (e.g., from localStorage or a context)
+//       const authToken = localStorage.getItem('auth-token'); // Replace with your token retrieval logic
+
+//       if (!authToken) {
+//         console.error('No authentication token found');
+//         return;
+//       }
+//       const response = await axios.get(`${GET_VENDOR}`, {
+//         headers: {
+//           Authorization: `Bearer ${authToken}`, // Add the auth token to the header
+//         },
+//       });
+//       const data: any = response.data;
+//       if (Array.isArray(data)) {
+//         console.log(data, 'data');
+//         setCustomers(data);
+//       } else if (data.data && Array.isArray(data.data)) {
+//         setCustomers(data.data);
+//       } else {
+//         console.error('Unexpected API response format:', data);
+//       }
+//     }
+//     catch (error) {
+//       console.error('Error fetching vendors:', error);
+//     }
+//   };
+
+//   const handleVendorUpdate = () => {
+//     fetchCustomers(); // Re-fetch the vendor list
+//   };
+
+//   useEffect(() => {
+//     fetchCustomers(); // Fetch vendors on component mount
+//   }, []);
+
+//   // Apply pagination to the customers list
+//   const paginatedCustomers = applyPagination(customers, page, rowsPerPage);
+
+//   const StoreUserdataList = (order: any): void => {
+//     setUserList(order);
+//   };
+
+//   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+//     setPage(value); 
+// // Update the page state when the user changes the page
+//   };
+
+//   return (
+//     <Stack spacing={3}>
+//       <Stack direction="row" spacing={3}>
+//         <Stack spacing={1} sx={{ flex: '1 1 auto' }}>
+//           <Typography variant="h4">User</Typography>
+//         </Stack>
+//         <div>
+//           <Button startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />} variant="contained">
+//             Add user
+//           </Button>
+//         </div>
+//       </Stack>
+
+//       <CustomersFilters storeUserdataList1={StoreUserdataList} page ={page} />
+
+//       <LatestOrders
+//         orders={paginatedCustomers.map((vendor: any) => ({
+//           id: vendor.id,
+//           customer: { name: `${vendor.firstName ?? ''} ${vendor.lastName ?? ''}`.trim() },
+//           firstName: vendor.firstName,
+//           lastName: vendor.lastName,
+//           payment_Status: vendor.payment_Status || 'unknown',
+//           status: vendor.profileStatus ? vendor.profileStatus.toLowerCase() : 'unknown',
+//           createdAt: dayjs(vendor.createdAt).toDate(),
+//         }))}
+//         sx={{ height: '100%' }}
+//         onVendorUpdated={handleVendorUpdate} // Pass the callback
+//         customUserlist={userList}
+//         page={page}
+//       />
+
+//       {/* Pagination component */}
+//       <Pagination
+//         count={10} // Calculate total pages
+//         page={page} // Current page
+//         onChange={handlePageChange} // Page change handler
+//         color="primary"
+//       />
+//     </Stack>
+//   );
+// }
+
+// // Pagination helper function
+// function applyPagination(rows: Customer[], page: number, rowsPerPage: number): Customer[] {
+//   return rows.slice((page - 1) * rowsPerPage, page * rowsPerPage); // Update to work with 1-based page index
+// }
+
+
+
+/* eslint-disable -- Allowing console logs for debugging purposes*/
+import * as React from 'react';
 import { useEffect } from 'react';
-const customers = [] satisfies Customer[];
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardHeader from '@mui/material/CardHeader';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import type { SxProps } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import dayjs from 'dayjs';
+import Modal from '@mui/material/Modal';
+import Button from '@mui/material/Button';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import { useState } from 'react';
+import { CircularProgress } from '@mui/material';
+import axios from 'axios';
+import { UPDATE_VENDOR } from '@/constants';
+import { TextField, Badge, Autocomplete } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import { ToastContainer, toast } from 'react-toastify';
 
-export default function Page(): React.JSX.Element {
-  const [customers, setCustomers] = useState<Customer[]>([])
-  const [userList, setUserList] = useState<any[]>([]); // State to manage user list
+const statusMap = {
+  pending: { label: 'Pending', color: 'warning' },
+  approved: { label: 'Approved', color: 'success' },
+  cancelled: { label: 'Cancelled', color: 'error' },
+} as const;
 
-  const [page, setPage] = useState(1); // Current page state
-  const rowsPerPage = 5; // Rows per page
+export interface Order {
+  location: string;
+  role: string;
+  id: string;
+  customer: { name: string };
+  status: 'pending' | 'approved' | 'cancelled';
+  createdAt: Date;
+  firstName: string;
+  lastName: string;
+  payment_Status: string;
 
-  const fetchCustomers = async () => {
-    try {
-      // Retrieve the authentication token (e.g., from localStorage or a context)
-      const authToken = localStorage.getItem('auth-token'); // Replace with your token retrieval logic
-
-      if (!authToken) {
-        console.error('No authentication token found');
-        return;
-      }
-      const response = await axios.get(`${GET_VENDOR}`, {
-        headers: {
-          Authorization: `Bearer ${authToken}`, // Add the auth token to the header
-        },
-      });
-      const data: any = response.data;
-      if (Array.isArray(data)) {
-        console.log(data, 'data');
-        setCustomers(data);
-      } else if (data.data && Array.isArray(data.data)) {
-        setCustomers(data.data);
-      } else {
-        console.error('Unexpected API response format:', data);
-      }
-    }
-    catch (error) {
-      console.error('Error fetching vendors:', error);
-    }
-  };
-
-  const handleVendorUpdate = () => {
-    fetchCustomers(); // Re-fetch the vendor list
-  };
-
-  useEffect(() => {
-    fetchCustomers(); // Fetch vendors on component mount
-  }, []);
-
-  // Apply pagination to the customers list
-  const paginatedCustomers = applyPagination(customers, page, rowsPerPage);
-
-  const StoreUserdataList = (order: any): void => {
-    setUserList(order);
-  };
-
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value); 
-// Update the page state when the user changes the page
-  };
-  
-  return (
-    <Stack spacing={3}>
-      <Stack direction="row" spacing={3}>
-        <Stack spacing={1} sx={{ flex: '1 1 auto' }}>
-          <Typography variant="h4">User</Typography>
-        </Stack>
-        <div>
-          <Button startIcon={<PlusIcon fontSize="var(--icon-fontSize-md)" />} variant="contained">
-            Add user
-          </Button>
-        </div>
-      </Stack>
-
-      <CustomersFilters storeUserdataList1={StoreUserdataList} page ={page} />
-
-      <LatestOrders
-        orders={paginatedCustomers.map((vendor: any) => ({
-          id: vendor.id,
-          customer: { name: `${vendor.firstName ?? ''} ${vendor.lastName ?? ''}`.trim() },
-          firstName: vendor.firstName,
-          lastName: vendor.lastName,
-          payment_Status: vendor.payment_Status || 'unknown',
-          status: vendor.profileStatus ? vendor.profileStatus.toLowerCase() : 'unknown',
-          createdAt: dayjs(vendor.createdAt).toDate(),
-        }))}
-        sx={{ height: '100%' }}
-        onVendorUpdated={handleVendorUpdate} // Pass the callback
-        customUserlist={userList}
-        page={page}
-      />
-
-      {/* Pagination component */}
-      <Pagination
-        count={10} // Calculate total pages
-        page={page} // Current page
-        onChange={handlePageChange} // Page change handler
-        color="primary"
-      />
-    </Stack>
-  );
 }
 
-// Pagination helper function
-function applyPagination(rows: Customer[], page: number, rowsPerPage: number): Customer[] {
-  return rows.slice((page - 1) * rowsPerPage, page * rowsPerPage); // Update to work with 1-based page index
+export interface LatestOrdersProps {
+  orders?: Order[];
+  sx?: SxProps;
+  onVendorUpdated?: () => void; // Add this line
+  customUserlist: Order[];
+  page: number;
+
+}
+
+export default function Page(): React.JSX.Element {
+  const [open, setOpen] = React.useState(false);
+  const [selectedOrder, setSelectedOrder] = React.useState<Order | null>(null);
+  const [orders1, setOrders] = React.useState<Order[] | undefined>([]);
+  const [loading, setLoading] = React.useState<boolean>(false); // State to manage loading status
+  const [selectedStatus, setSelectedStatus] = React.useState<'pending' | 'approved' | 'cancelled'>('pending');
+
+  // authtoken
+  const authToken = localStorage.getItem('auth-token');
+
+  // fetching the data from the API
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [locationFilter, setLocationFilter] = useState('');
+  const [multiFilter, setMultiFilter] = useState<string[]>([]);
+
+  const [allOrders, setAllOrders] = useState<Order[]>([]);   // Unfiltered full data
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);  // Filtered data
+
+  // Filtering logic
+  // const filteredOrders = orders1?.filter(order => {
+  //   const fullName = `${order.firstName ?? ''} ${order.lastName ?? ''}`.toLowerCase();
+  //   const matchesName = fullName.includes(searchQuery);
+  //   const matchesLocation = !locationFilter || order.location === locationFilter;
+  //   const matchesStatus = multiFilter.length === 0 || multiFilter.includes(order.status);
+  //   return matchesName && matchesLocation && matchesStatus;
+  // }) ?? [];
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(`http://localhost:4000/api/v1/user/getAllUsers`, {
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+          },
+        }
+        )
+        console.log("response is", response.data.users);
+        setOrders(Array.isArray(response.data.users) ? response.data.users : []);
+
+        setAllOrders(response.data.users);       // Store full unfiltered data
+        setFilteredOrders(response.data.users);  // Also show full data by default
+        // console.log('response.data', response.data.data.results);
+        // console.log( 'response.data',response.data);
+        console.log("the orders are in the orders", orders1)
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+        toast.error('Failed to fetch user data.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+  // React.useEffect(() => {
+  //   setOrders(customUserlist ?? []);
+  // }, [customUserlist]);
+
+
+  // console.log("the orders are in the orders", orders1)
+
+  // const handleEditClick = (order: Order) => {
+  //   setSelectedOrder(order);
+  //   setSelectedStatus(order.status);
+  //   setOpen(true);
+  // };
+
+  useEffect(() => {
+    const applyFilters = () => {
+      const filtered = allOrders.filter(order => {
+        const fullName = `${order.firstName ?? ''} ${order.lastName ?? ''}`.toLowerCase();
+        const matchesName = fullName.includes(searchQuery.toLowerCase());
+        const matchesLocation = !locationFilter || order.location === locationFilter;
+        const matchesStatus = multiFilter.length === 0 || multiFilter.includes(order.status);
+        return matchesName && matchesLocation && matchesStatus;
+      });
+
+      setFilteredOrders(filtered);
+    };
+
+    applyFilters();
+  }, [searchQuery, locationFilter, multiFilter, allOrders]);
+
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedOrder(null);
+  };
+
+  const handleStatusChange = (event: any) => {
+    setSelectedStatus(event.target.value as 'pending' | 'approved' | 'cancelled');
+  };
+
+  const handleDone = async () => {
+    // Handle the status update logic here
+    console.log('Updated Status:', selectedStatus);
+    if (!selectedStatus.trim()) {
+      alert("Please select a status")
+      return;
+    }
+    setLoading(true); // Start loading
+
+    try {
+      // Retrieve the auth token from localStorage
+
+      if (!authToken) {
+        throw new Error('No authentication token found. Please log in.');
+      }
+      const response = await axios.patch(`${UPDATE_VENDOR}/${selectedOrder?.id}`, { profileStatus: selectedStatus }, {
+        headers: {
+          'Authorization': `Bearer ${authToken}`,
+        },
+      });
+      // if (response.status != 200) {
+      //   alert(response.data.message)
+      // } else {
+      //   if (onVendorUpdated) {
+      //     onVendorUpdated(); // Call the callback to refresh the list
+      //   }
+      //   handleClose();
+      // }
+      // console.log({ orders, sx, onVendorUpdated }, "onVendorUpdated")
+      const data = await response.data;
+      handleClose()
+      console.log(response, 'response');
+
+      const notify = () => toast(response.data.message);
+      notify();
+    } catch (error) {
+      console.error('Error updating status:', error);
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
+
+  function capitalizeFirstLetter(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  return (
+    <>
+      <h1>User Management</h1>
+      <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 3 }}>
+        {/* Search Input */}
+        <TextField
+          label="Search by name"
+          variant="outlined"
+          size="small"
+          onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
+        />
+
+        {/* Location Filter */}
+        <FormControl size="small" sx={{ minWidth: 150 }}>
+          <InputLabel id="location-label">Location</InputLabel>
+          <Select
+            labelId="location-label"
+            value={locationFilter}
+            label="Location"
+            onChange={(e) => setLocationFilter(e.target.value)}
+          >
+            <MenuItem value=""><em>All</em></MenuItem>
+            {Array.from(new Set(orders1?.map(order => order.location || 'Unknown'))).map((loc, idx) => (
+              <MenuItem key={idx} value={loc}>{loc}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        {/* Multi-select Filter */}
+        <Autocomplete
+          multiple
+          size="small"
+          options={['pending', 'approved', 'cancelled']}
+          getOptionLabel={(option) => capitalizeFirstLetter(option)}
+          value={multiFilter}
+          onChange={(_, newValue) => setMultiFilter(newValue)}
+          renderInput={(params) => (
+            <Badge badgeContent={multiFilter.length} color="primary">
+              <TextField {...params} label="Filter by Status" />
+            </Badge>
+          )}
+          sx={{ minWidth: 200 }}
+        />
+
+        {/* Add Users Button */}
+        <Button variant="contained" startIcon={<AddIcon />}>
+          Add Users
+        </Button>
+      </Box>
+      <Card sx={{ height: '100%' }}>
+        {/* <CardHeader title="User List" />
+      <Divider /> */}
+        <Box sx={{ overflowX: 'auto' }}>
+          <Table sx={{ minWidth: 800 }}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell sortDirection="desc">Role</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Active Jobs</TableCell>
+                <TableCell>Earnings</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {Array.isArray(filteredOrders) && filteredOrders.map((order, idx) => {
+                const { label, color } = statusMap[order.status] ?? { label: 'Unknown', color: 'default' };
+
+                return (
+                  <TableRow hover key={idx}>
+                    <TableCell>{(order.firstName ? order.firstName : '') + " " + (order.lastName ? order.lastName : '')}</TableCell>
+                    <TableCell>{order.role}</TableCell>
+                    <TableCell>{order.status}</TableCell>
+                    <TableCell>{ }</TableCell>
+
+                    <TableCell>
+                      <IconButton color="primary" aria-label="view" >
+                        <VisibilityIcon />
+                      </IconButton>
+                      <IconButton color="secondary" aria-label="edit" >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton color="error" aria-label="delete">
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </Box>
+        <Divider />
+        <CardActions sx={{ justifyContent: 'flex-end' }}></CardActions>
+
+        <Modal open={open} onClose={handleClose}>
+          <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', boxShadow: 24, p: 4 }}>
+            <FormControl fullWidth>
+              <InputLabel id="status-select-label">Status</InputLabel>
+              <Select
+                labelId="status-select-label"
+                value={selectedStatus}
+                label="Status"
+                onChange={handleStatusChange}
+              >
+                <MenuItem value="pending">Pending</MenuItem>
+                <MenuItem value="approved">Approved</MenuItem>
+                <MenuItem value="cancelled">Cancelled</MenuItem>
+              </Select>
+            </FormControl>
+            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+              <Button onClick={handleClose} sx={{ mr: 1 }}>Cancel</Button>
+              <Button variant="contained" onClick={handleDone} disabled={loading} // Disable button when loading
+              >
+                {loading ? <CircularProgress size={24} /> : 'Done'}</Button>
+            </Box>
+          </Box>
+        </Modal>
+        <ToastContainer />
+      </Card>
+    </>
+  );
 }

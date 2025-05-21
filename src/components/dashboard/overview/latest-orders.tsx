@@ -185,7 +185,7 @@ export function LatestOrders({ orders = [], sx, onVendorUpdated, customUserlist,
                 <TableRow hover key={idx}>
                   <TableCell>{(order.firstName ? order.firstName : '') + " " + (order.lastName ? order.lastName : '')}</TableCell>
                   <TableCell>{order.role}</TableCell>
-                  <TableCell>{dayjs(order.createdAt).format('MMM D, YYYY')}</TableCell>
+                  <TableCell>{order.status}</TableCell>
                   <TableCell>{}</TableCell>
 
                   <TableCell>

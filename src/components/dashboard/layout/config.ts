@@ -3,7 +3,7 @@ import type { NavItemConfig } from '@/types/nav';
 import { paths } from '@/paths';
 export const navItems = [
   { key: 'dashboard', title: 'Dashboard', href: paths.dashboard.dashboard, icon: 'chart-pie' },
-  { key: 'user', title: 'Users', href: paths.dashboard.vendor, icon: 'users' },
+  { key: 'user', title: 'User Management', href: paths.dashboard.vendor, icon: 'users' },
   
   { key: 'payments', title: 'Payments', href: paths.dashboard.payments, icon: 'credit-card' },
 

@@ -166,10 +166,11 @@ export function LatestOrders({ orders = [], sx, onVendorUpdated, customUserlist,
         <Table sx={{ minWidth: 800 }}>
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
-              <TableCell sortDirection="desc">Register On</TableCell>
-              <TableCell>Payment Status</TableCell>
+              <TableCell sortDirection="desc">Role</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Active Jobs</TableCell>
+              <TableCell>Earnings</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>

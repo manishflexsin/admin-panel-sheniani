@@ -77,10 +77,11 @@ export function LatestOrders({ orders = [], sx, onVendorUpdated, customUserlist,
           },
         }
         )
-        console.log("response is", response);
-        setOrders(Array.isArray(response.data.data.users) ? response.data.data.users : []);
-        console.log('response.data', response.data.data.results);
+        console.log("response is",  response.data.users);
+        setOrders(Array.isArray(response.data.users) ? response.data.users : []);
+        // console.log('response.data', response.data.data.results);
         // console.log( 'response.data',response.data);
+        console.log("the orders are in the orders", orders1)
       } catch (error) {
         console.error('Error fetching orders:', error);
         toast.error('Failed to fetch user data.');
@@ -90,19 +91,19 @@ export function LatestOrders({ orders = [], sx, onVendorUpdated, customUserlist,
     };
 
     fetchOrders();
-  }, [page]);
-  React.useEffect(() => {
-    setOrders(customUserlist ?? []);
-  }, [customUserlist]);
+  }, []);
+  // React.useEffect(() => {
+  //   setOrders(customUserlist ?? []);
+  // }, [customUserlist]);
 
 
-  console.log("the orders are in the orders", orders1)
+  // console.log("the orders are in the orders", orders1)
 
-  const handleEditClick = (order: Order) => {
-    setSelectedOrder(order);
-    setSelectedStatus(order.status);
-    setOpen(true);
-  };
+  // const handleEditClick = (order: Order) => {
+  //   setSelectedOrder(order);
+  //   setSelectedStatus(order.status);
+  //   setOpen(true);
+  // };
 
   const handleClose = () => {
     setOpen(false);
@@ -176,21 +177,21 @@ export function LatestOrders({ orders = [], sx, onVendorUpdated, customUserlist,
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.isArray(orders1) && orders1.map((order) => {
+            {Array.isArray(orders1) && orders1.map((order, idx) => {
               const { label, color } = statusMap[order.status] ?? { label: 'Unknown', color: 'default' };
 
               return (
-                <TableRow hover key={order.id}>
+                <TableRow hover key={idx}>
                   <TableCell>{ }</TableCell>
                   <TableCell>{order.firstName ? order.firstName : '' + " " + order.lastName ? order.lastName : ''}</TableCell>
                   <TableCell>{dayjs(order.createdAt).format('MMM D, YYYY')}</TableCell>
-                  <TableCell>{capitalizeFirstLetter(order.payment_Status)}</TableCell>
+                  <TableCell>{}</TableCell>
 
                   <TableCell>
                     <IconButton color="primary" aria-label="view" >
                       <VisibilityIcon />
                     </IconButton>
-                    <IconButton color="secondary" aria-label="edit" onClick={() => handleEditClick(order)}>
+                    <IconButton color="secondary" aria-label="edit" >
                       <EditIcon />
                     </IconButton>
                     <IconButton color="error" aria-label="delete">

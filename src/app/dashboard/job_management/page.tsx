@@ -80,14 +80,6 @@ export default function Page(): React.JSX.Element {
   const [allOrders, setAllOrders] = useState<Order[]>([]);   // Unfiltered full data
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);  // Filtered data
 
-  // Filtering logic
-  // const filteredOrders = orders1?.filter(order => {
-  //   const fullName = `${order.firstName ?? ''} ${order.lastName ?? ''}`.toLowerCase();
-  //   const matchesName = fullName.includes(searchQuery);
-  //   const matchesLocation = !locationFilter || order.location === locationFilter;
-  //   const matchesStatus = multiFilter.length === 0 || multiFilter.includes(order.status);
-  //   return matchesName && matchesLocation && matchesStatus;
-  // }) ?? [];
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -116,18 +108,6 @@ export default function Page(): React.JSX.Element {
 
     fetchOrders();
   }, []);
-  // React.useEffect(() => {
-  //   setOrders(customUserlist ?? []);
-  // }, [customUserlist]);
-
-
-  // console.log("the orders are in the orders", orders1)
-
-  // const handleEditClick = (order: Order) => {
-  //   setSelectedOrder(order);
-  //   setSelectedStatus(order.status);
-  //   setOpen(true);
-  // };
 
   useEffect(() => {
     const applyFilters = () => {
@@ -175,15 +155,6 @@ export default function Page(): React.JSX.Element {
           'Authorization': `Bearer ${authToken}`,
         },
       });
-      // if (response.status != 200) {
-      //   alert(response.data.message)
-      // } else {
-      //   if (onVendorUpdated) {
-      //     onVendorUpdated(); // Call the callback to refresh the list
-      //   }
-      //   handleClose();
-      // }
-      // console.log({ orders, sx, onVendorUpdated }, "onVendorUpdated")
       const data = await response.data;
       handleClose()
       console.log(response, 'response');

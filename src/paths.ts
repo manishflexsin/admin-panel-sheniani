@@ -9,6 +9,7 @@ export const paths = {
     payments: '/dashboard/payments',
     categories: '/dashboard/service-categories',
     settings: '/dashboard/settings',
+    job_management: '/dashboard/job_management',
   },
   errors: { notFound: '/errors/not-found' },
 } as const;

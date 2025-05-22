@@ -162,6 +162,7 @@ import { UPDATE_VENDOR } from '@/constants';
 import { TextField, Badge, Autocomplete } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { ToastContainer, toast } from 'react-toastify';
+import { SelectChangeEvent } from '@mui/material';
 
 const statusMap = {
   pending: { label: 'Pending', color: 'warning' },
@@ -327,6 +328,35 @@ export default function Page(): React.JSX.Element {
     }
   };
 
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const [newUser, setNewUser] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    role: '',
+    earnings: '',
+    status: '',
+    jobsCompleted: '',
+  });
+  const [isRegistering, setIsRegistering] = useState(false);
+
+  // Handle input change
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
+    const { name, value } = e.target;
+    setNewUser(prev => ({ ...prev, [name as string]: value }));
+  };
+
+  const handleSelectChange = (event: SelectChangeEvent) => {
+    const { name, value } = event.target;
+    setNewUser(prev => ({ ...prev, [name]: value }));
+  };
+
+  // Open/Close modal
+  const handleOpenAddModal = () => setOpenAddModal(true);
+  const handleCloseAddModal = () => setOpenAddModal(false);
+
+
   function capitalizeFirstLetter(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
@@ -376,7 +406,7 @@ export default function Page(): React.JSX.Element {
         />
 
         {/* Add Users Button */}
-        <Button variant="contained" startIcon={<AddIcon />}>
+        <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenAddModal}>
           Add Users
         </Button>
       </Box>
@@ -449,6 +479,104 @@ export default function Page(): React.JSX.Element {
             </Box>
           </Box>
         </Modal>
+
+        <Modal open={openAddModal} onClose={handleCloseAddModal}>
+          <Box sx={{
+            position: 'absolute', top: '50%', left: '50%',
+            transform: 'translate(-50%, -50%)', width: 600,
+            bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: 2
+          }}>
+            <h2 style={{ marginBottom: 20 }}>Add New User</h2>
+
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {/* Row 1: First Name & Last Name */}
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                <TextField label="First Name" name="firstName" value={newUser.firstName} onChange={handleInputChange} fullWidth />
+                <TextField label="Last Name" name="lastName" value={newUser.lastName} onChange={handleInputChange} fullWidth />
+              </Box>
+
+              {/* Row 2: Email & Password */}
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                <TextField label="Email" name="email" value={newUser.email} onChange={handleInputChange} fullWidth />
+                <TextField label="Password" name="password" value={newUser.password} onChange={handleInputChange} fullWidth type="password" />
+              </Box>
+
+              {/* Row 3: Role & Earnings */}
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                <TextField label="Role" name="role" value={newUser.role} onChange={handleInputChange} fullWidth />
+                <TextField label="Earnings" name="earnings" value={newUser.earnings} onChange={handleInputChange} fullWidth />
+              </Box>
+
+              {/* Row 4: Status & Jobs Completed */}
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                <FormControl fullWidth>
+                  <InputLabel>Status</InputLabel>
+                  <Select
+                    name="status"
+                    value={newUser.status}
+                    onChange={handleSelectChange}
+                    label="Status"
+                  >
+                    <MenuItem value="active">Active</MenuItem>
+                    <MenuItem value="inactive">Inactive</MenuItem>
+                    <MenuItem value="premium">Premium</MenuItem>
+                    <MenuItem value="restricted">Restricted</MenuItem>
+                  </Select>
+                </FormControl>
+                <TextField
+                  label="Jobs Completed"
+                  name="jobsCompleted"
+                  value={newUser.jobsCompleted}
+                  onChange={handleInputChange}
+                  fullWidth
+                  type="number"
+                />
+              </Box>
+
+              {/* Buttons */}
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 2 }}>
+                <Button onClick={handleCloseAddModal}>Cancel</Button>
+                <Button
+                  variant="contained"
+                  onClick={async () => {
+                    setIsRegistering(true);
+                    try {
+                      const authToken = localStorage.getItem('auth-token');
+                      const response = await axios.post('http://localhost:4000/api/v1/auth/register', newUser, {
+                        headers: {
+                          'Authorization': `Bearer ${authToken}`,
+                        },
+                      });
+                      toast.success(response.data.message || 'User registered successfully');
+                      handleCloseAddModal();
+                      setNewUser({
+                        firstName: '',
+                        lastName: '',
+                        email: '',
+                        password: '',
+                        role: '',
+                        earnings: '',
+                        status: '',
+                        jobsCompleted: '',
+                      });
+                      // Refresh logic here
+                    } catch (error: any) {
+                      console.error('Registration error:', error);
+                      toast.error(error?.response?.data?.message || 'Failed to register user');
+                    } finally {
+                      setIsRegistering(false);
+                    }
+                  }}
+                  disabled={isRegistering}
+                >
+                  {isRegistering ? <CircularProgress size={24} /> : 'Add User'}
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        </Modal>
+
+
         <ToastContainer />
       </Card>
     </>

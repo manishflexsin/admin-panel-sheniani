@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import axios from 'axios';
+import { Grid, TextField, Typography } from '@mui/material';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
@@ -110,7 +111,7 @@ export default function BlogAdmin() {
                 <Column header="Actions" style={{ width: '15%' }} body={actionColumnTemplate} />
             </DataTable>
 
-            <Dialog header={isCreating ? 'Add Blog' : 'Edit Blog'} visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
+            {/* <Dialog header={isCreating ? 'Add Blog' : 'Edit Blog'} visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
                 <div className="mb-4">
                     <input
                         type="text"
@@ -122,7 +123,53 @@ export default function BlogAdmin() {
                     <JoditEditor value={content} onChange={(newContent) => setContent(newContent)} />
                 </div>
                 <Button label="Save" icon="pi pi-check" onClick={handleSave} autoFocus />
+            </Dialog> */}
+
+            {/* <Dialog header={isCreating ? 'Add Blog' : 'Edit Blog'} visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
+                <div className="grid grid-cols-4 gap-4 mb-4 items-start">
+                    <label className="col-span-1 font-semibold mt-2">Title:</label>
+                    <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="col-span-3 border p-2 w-full"
+                    />
+
+                    <label className="col-span-1 font-semibold mt-2">Content:</label>
+                    <div className="col-span-3">
+                        <JoditEditor value={content} onChange={(newContent) => setContent(newContent)} />
+                    </div>
+                </div>
+                <div className="flex justify-end">
+                    <Button label="Save" icon="pi pi-check" onClick={handleSave} autoFocus />
+                </div>
+            </Dialog> */}
+            <Dialog header={isCreating ? 'Add Blog' : 'Edit Blog'} visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
+                <Grid container spacing={2} mb={2}>
+                    <Grid item xs={3}>
+                        <Typography fontWeight="bold" mt={1}>Title:</Typography>
+                    </Grid>
+                    <Grid item xs={9}>
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                        />
+                    </Grid>
+
+                    <Grid item xs={3}>
+                        <Typography fontWeight="bold" mt={2}>Content:</Typography>
+                    </Grid>
+                    <Grid item xs={9}>
+                        <JoditEditor value={content} onChange={(newContent) => setContent(newContent)} />
+                    </Grid>
+                </Grid>
+
+                <div style={{ textAlign: 'right' }}>
+                    <Button label="Save" icon="pi pi-check" onClick={handleSave} autoFocus />
+                </div>
             </Dialog>
-        </div>
+        </div >
     );
 }

@@ -10,6 +10,7 @@ export const paths = {
     categories: '/dashboard/service-categories',
     settings: '/dashboard/settings',
     job_management: '/dashboard/job_management',
+    blog_management: '/dashboard/blog_management',
   },
   errors: { notFound: '/errors/not-found' },
 } as const;

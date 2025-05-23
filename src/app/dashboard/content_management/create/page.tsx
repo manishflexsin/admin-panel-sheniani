@@ -55,19 +55,97 @@
 // }
 
 
+// 'use client';
+
+// import { TextField, Typography, Button, Box } from '@mui/material';
+// import { useState } from 'react';
+// import dynamic from 'next/dynamic';
+// import axios from 'axios';
+// import { useRouter } from 'next/navigation';
+
+// const JoditEditor = dynamic(() => import('jodit-react'), { ssr: false });
+
+// export default function CreateStaticPage() {
+//     const router = useRouter();
+//     const [formData, setFormData] = useState({
+//         title_en: '', title_ka: '',
+//         content_en: '', content_ka: '',
+//         metaTitle_en: '', metaTitle_ka: '',
+//         metaDesc_en: '', metaDesc_ka: '',
+//         metaKeywords_en: '', metaKeywords_ka: ''
+//     });
+
+//     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//         setFormData({ ...formData, [e.target.name]: e.target.value });
+//     };
+
+//     const handleEditorChange = (name: string, value: string) => {
+//         setFormData({ ...formData, [name]: value });
+//     };
+
+//     const handleSubmit = async () => {
+//         await axios.post('http://localhost:4000/api/v1/pages/create', formData);
+//         router.push('/dashboard/static_pages');
+//     };
+
+//     const renderTextField = (label: string, name: string) => (
+//         <Box mb={4}>
+//             <Typography fontWeight="bold">{label}</Typography>
+//             <TextField
+//                 name={name}
+//                 value={(formData as any)[name]}
+//                 onChange={handleChange}
+//                 fullWidth
+//                 variant="outlined"
+//             />
+//         </Box>
+//     );
+
+//     const renderEditor = (label: string, name: string) => (
+//         <Box mb={4}>
+//             <Typography fontWeight="bold">{label}</Typography>
+//             <JoditEditor
+//                 value={(formData as any)[name]}
+//                 onChange={(value) => handleEditorChange(name, value)}
+//             />
+//         </Box>
+//     );
+
+//     return (
+//         <Box p={4}>
+//             <Typography variant="h4" mb={4}>Create Static Page</Typography>
+//             {renderTextField('Title (English)', 'title_en')}
+//             {renderTextField('Title (Georgian)', 'title_ka')}
+//             {renderEditor('Content (English)', 'content_en')}
+//             {renderEditor('Content (Georgian)', 'content_ka')}
+//             {renderTextField('Meta Title (English)', 'metaTitle_en')}
+//             {renderTextField('Meta Title (Georgian)', 'metaTitle_ka')}
+//             {renderTextField('Meta Description (English)', 'metaDesc_en')}
+//             {renderTextField('Meta Description (Georgian)', 'metaDesc_ka')}
+//             {renderTextField('Meta Keywords (English)', 'metaKeywords_en')}
+//             {renderTextField('Meta Keywords (Georgian)', 'metaKeywords_ka')}
+//             <Button variant="contained" onClick={handleSubmit}>Save</Button>
+//         </Box>
+//     );
+// }
+
+
+
 'use client';
 
-import { TextField, Typography, Button, Box } from '@mui/material';
 import { useState } from 'react';
-import dynamic from 'next/dynamic';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import dynamic from 'next/dynamic';
+import { Box, Typography, TextField, Button } from '@mui/material';
 
 const JoditEditor = dynamic(() => import('jodit-react'), { ssr: false });
 
 export default function CreateStaticPage() {
     const router = useRouter();
+
     const [formData, setFormData] = useState({
+        slug: '',
         title_en: '', title_ka: '',
         content_en: '', content_ka: '',
         metaTitle_en: '', metaTitle_ka: '',
@@ -84,11 +162,15 @@ export default function CreateStaticPage() {
     };
 
     const handleSubmit = async () => {
-        await axios.post('http://localhost:4000/api/v1/pages/create', formData);
-        router.push('/dashboard/static_pages');
+        try {
+            await axios.post('http://localhost:4000/api/v1/pages/create', formData);
+            router.push('/dashboard/static_pages');
+        } catch (err) {
+            console.error('Failed to create page:', err);
+        }
     };
 
-    const renderTextField = (label: string, name: string) => (
+    const renderTextArea = (label: string, name: string) => (
         <Box mb={4}>
             <Typography fontWeight="bold">{label}</Typography>
             <TextField
@@ -96,6 +178,8 @@ export default function CreateStaticPage() {
                 value={(formData as any)[name]}
                 onChange={handleChange}
                 fullWidth
+                multiline
+                rows={3}
                 variant="outlined"
             />
         </Box>
@@ -114,17 +198,18 @@ export default function CreateStaticPage() {
     return (
         <Box p={4}>
             <Typography variant="h4" mb={4}>Create Static Page</Typography>
-            {renderTextField('Title (English)', 'title_en')}
-            {renderTextField('Title (Georgian)', 'title_ka')}
+            {renderTextArea('Slug', 'slug')}
+            {renderTextArea('Title (English)', 'title_en')}
+            {renderTextArea('Title (Georgian)', 'title_ka')}
             {renderEditor('Content (English)', 'content_en')}
             {renderEditor('Content (Georgian)', 'content_ka')}
-            {renderTextField('Meta Title (English)', 'metaTitle_en')}
-            {renderTextField('Meta Title (Georgian)', 'metaTitle_ka')}
-            {renderTextField('Meta Description (English)', 'metaDesc_en')}
-            {renderTextField('Meta Description (Georgian)', 'metaDesc_ka')}
-            {renderTextField('Meta Keywords (English)', 'metaKeywords_en')}
-            {renderTextField('Meta Keywords (Georgian)', 'metaKeywords_ka')}
-            <Button variant="contained" onClick={handleSubmit}>Save</Button>
+            {renderTextArea('Meta Title (English)', 'metaTitle_en')}
+            {renderTextArea('Meta Title (Georgian)', 'metaTitle_ka')}
+            {renderTextArea('Meta Description (English)', 'metaDesc_en')}
+            {renderTextArea('Meta Description (Georgian)', 'metaDesc_ka')}
+            {renderTextArea('Meta Keywords (English)', 'metaKeywords_en')}
+            {renderTextArea('Meta Keywords (Georgian)', 'metaKeywords_ka')}
+            <Button variant="contained" onClick={handleSubmit}>Create Page</Button>
         </Box>
     );
 }

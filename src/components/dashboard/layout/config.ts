@@ -6,5 +6,5 @@ export const navItems = [
   { key: 'user', title: 'User Management', href: paths.dashboard.vendor, icon: 'users' },
   { key: 'job', title: 'Job Management', href: paths.dashboard.job_management, icon: 'users' },
   { key: 'blog', title: 'Blog Management', href: paths.dashboard.blog_management, icon: 'users' },
-  
+  { key: 'faq', title: 'FAQ Management', href: paths.dashboard.faq_management, icon: 'users' },
 ] satisfies NavItemConfig[];

@@ -11,6 +11,7 @@ export const paths = {
     settings: '/dashboard/settings',
     job_management: '/dashboard/job_management',
     blog_management: '/dashboard/blog_management',
+    faq_management: '/dashboard/faq_management',
   },
   errors: { notFound: '/errors/not-found' },
 } as const;

@@ -18,26 +18,27 @@ export default function BlogForm({ isEditMode, blogId }: BlogFormProps) {
   const [content, setContent] = useState('');
   const [metaTitle, setMetaTitle] = useState('');
   const [metaDescription, setMetaDescription] = useState('');
-  const [metaKeyword, setMetaKeyword] = useState('');
+  const [metaKeywords, setMetaKeywords] = useState('');
   const [category, setCategory] = useState('');
   const router = useRouter();
 
   useEffect(() => {
     if (isEditMode && blogId) {
       axios.get(`http://localhost:4000/api/v1/blogs/${blogId}`).then(res => {
-        const blog = res.data;
+        const blog = res.data.data;
+        // console.log('Fetched blog:', blog, res);
         setTitle(blog.title);
         setContent(blog.content);
         setMetaTitle(blog.metaTitle);
         setMetaDescription(blog.metaDescription);
-        setMetaKeyword(blog.metaKeyword);
+        setMetaKeywords(blog.metaKeywords);
         setCategory(blog.category);
       });
     }
   }, [isEditMode, blogId]);
 
   const handleSave = async () => {
-    const payload = { title, content, metaTitle, metaDescription, metaKeyword, category };
+    const payload = { title, content, metaTitle, metaDescription, metaKeywords, category };
     if (isEditMode) {
       await axios.put(`http://localhost:4000/api/v1/blogs/${blogId}`, payload);
     } else {
@@ -53,7 +54,7 @@ export default function BlogForm({ isEditMode, blogId }: BlogFormProps) {
         { label: 'Category', value: category, setValue: setCategory },
         { label: 'Meta Title', value: metaTitle, setValue: setMetaTitle },
         { label: 'Meta Description', value: metaDescription, setValue: setMetaDescription },
-        { label: 'Meta Keyword', value: metaKeyword, setValue: setMetaKeyword },
+        { label: 'Meta Keyword', value: metaKeywords, setValue: setMetaKeywords },
       ].map(({ label, value, setValue }) => (
         <Box key={label} mb={6}>
           <Typography variant="subtitle1">{label}</Typography>

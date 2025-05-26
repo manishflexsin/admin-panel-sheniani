@@ -23,7 +23,7 @@ export default function StaticPages() {
   }, []);
 
   const fetchPages = async () => {
-    const res = await axios.get('http://localhost:4000/api/v1/pages');
+    const res = await axios.get('http://localhost:4000/api/v1/pages/getAllPages');
     setPages(res.data.data);
   };
 

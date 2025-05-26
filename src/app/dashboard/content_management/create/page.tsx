@@ -149,7 +149,7 @@ export default function CreateStaticPage() {
         title_en: '', title_ka: '',
         content_en: '', content_ka: '',
         metaTitle_en: '', metaTitle_ka: '',
-        metaDesc_en: '', metaDesc_ka: '',
+        metaDescription_en: '', metaDescription_ka: '',
         metaKeywords_en: '', metaKeywords_ka: ''
     });
 
@@ -164,7 +164,7 @@ export default function CreateStaticPage() {
     const handleSubmit = async () => {
         try {
             await axios.post('http://localhost:4000/api/v1/pages/create', formData);
-            router.push('/dashboard/static_pages');
+            router.push('/dashboard/content_management');
         } catch (err) {
             console.error('Failed to create page:', err);
         }
@@ -205,8 +205,8 @@ export default function CreateStaticPage() {
             {renderEditor('Content (Georgian)', 'content_ka')}
             {renderTextArea('Meta Title (English)', 'metaTitle_en')}
             {renderTextArea('Meta Title (Georgian)', 'metaTitle_ka')}
-            {renderTextArea('Meta Description (English)', 'metaDesc_en')}
-            {renderTextArea('Meta Description (Georgian)', 'metaDesc_ka')}
+            {renderTextArea('Meta Description (English)', 'metaDescription_en')}
+            {renderTextArea('Meta Description (Georgian)', 'metaDescription_ka')}
             {renderTextArea('Meta Keywords (English)', 'metaKeywords_en')}
             {renderTextArea('Meta Keywords (Georgian)', 'metaKeywords_ka')}
             <Button variant="contained" onClick={handleSubmit}>Create Page</Button>

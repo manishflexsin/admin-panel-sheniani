@@ -165,7 +165,7 @@ export default function EditStaticPage() {
         title_en: '', title_ka: '',
         content_en: '', content_ka: '',
         metaTitle_en: '', metaTitle_ka: '',
-        metaDesc_en: '', metaDesc_ka: '',
+        metaDescription_en: '', metaDescription_ka: '',
         metaKeywords_en: '', metaKeywords_ka: ''
     });
 
@@ -177,7 +177,7 @@ export default function EditStaticPage() {
 
     const fetchPageData = async (slug: string) => {
         try {
-            const res = await axios.get(`http://localhost:4000/api/v1/pages/${slug}`);
+            const res = await axios.get(`http://localhost:4000/api/v1/pages/slug/${slug}`);
             setFormData(res.data.data);
         } catch (err) {
             console.error('Failed to fetch page data:', err);
@@ -195,7 +195,7 @@ export default function EditStaticPage() {
     const handleSubmit = async () => {
         try {
             await axios.put(`http://localhost:4000/api/v1/pages/${slug}`, formData);
-            router.push('/dashboard/static_pages');
+            router.push('/dashboard/content_management');
         } catch (err) {
             console.error('Failed to update page:', err);
         }
@@ -235,8 +235,8 @@ export default function EditStaticPage() {
             {renderEditor('Content (Georgian)', 'content_ka')}
             {renderTextArea('Meta Title (English)', 'metaTitle_en')}
             {renderTextArea('Meta Title (Georgian)', 'metaTitle_ka')}
-            {renderTextArea('Meta Description (English)', 'metaDesc_en')}
-            {renderTextArea('Meta Description (Georgian)', 'metaDesc_ka')}
+            {renderTextArea('Meta Description (English)', 'metaDescription_en')}
+            {renderTextArea('Meta Description (Georgian)', 'metaDescription_ka')}
             {renderTextArea('Meta Keywords (English)', 'metaKeywords_en')}
             {renderTextArea('Meta Keywords (Georgian)', 'metaKeywords_ka')}
             <Button variant="contained" onClick={handleSubmit}>Save Changes</Button>
